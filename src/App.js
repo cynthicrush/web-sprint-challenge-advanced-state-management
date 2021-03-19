@@ -1,14 +1,21 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
+import { connect } from "react-redux";
 
 import AddForm from './components/AddForm';
 import SmurfList from './components/SmurfList';
 import Header from './components/Header';
 
+import { fetchSmurfs } from './actions';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
-class App extends Component {
-  render() {
+const App = props => {
+  const { fetchSmurfs } = props;
+  useEffect(() => {
+    fetchSmurfs();
+  }, [fetchSmurfs]);
+  
     return (
       <div className="App">
         <Header />
@@ -19,10 +26,17 @@ class App extends Component {
         </main>
       </div>
     );
+}
+
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.isLoading,
+    smurfs: state.smurfs,
+    error: state.error
   }
 }
 
-export default App;
+export default connect(mapStateToProps, { fetchSmurfs })(App);
 
 //Task List:
 //1. Connect the fetchSmurfs actions to the App component.
